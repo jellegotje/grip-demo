@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import WaveDecoration from '@/components/WaveDecoration';
 import { SessionData, AssessmentResults } from '@/lib/types';
 import { berekenResultaten } from '@/lib/scoring';
 import DimensieRadarChart from '@/components/RadarChart';
@@ -68,6 +69,11 @@ export default function ResultsPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
+      {/* Golflijnen decoratie bovenaan */}
+      <div className="-mx-4 -mt-8 mb-8 overflow-hidden">
+        <WaveDecoration className="h-16" />
+      </div>
+
       {/* Header */}
       <div className="mb-8">
         <p className="text-sm text-gray-500 mb-1">Resultaten voor</p>
@@ -171,7 +177,7 @@ export default function ResultsPage() {
         <h2 className="text-xl font-bold text-white mb-3">
           Wilt u een volledige meting met een Native Consulting adviseur?
         </h2>
-        <p className="text-blue-200 mb-6 text-sm">
+        <p className="mb-6 text-sm" style={{ color: '#5BC4A0' }}>
           Onze adviseurs helpen u met een diepgaande analyse en een concreet verbeterplan.
         </p>
         <a

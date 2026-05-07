@@ -7,3 +7,12 @@
 body {
   font-family: 'Inter', system-ui, sans-serif;
 }
+
+.btn-primary {
+  background-color: #1E3A5F;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: #5BC4A0;
+}

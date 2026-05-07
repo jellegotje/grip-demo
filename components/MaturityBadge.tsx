@@ -2,12 +2,12 @@
 
 import { MaturityLevel } from '@/lib/types';
 
-const badgeColors: Record<MaturityLevel, string> = {
-  'Ad hoc': 'bg-red-100 text-red-800 border-red-200',
-  'Bewust': 'bg-orange-100 text-orange-800 border-orange-200',
-  'Gestructureerd': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  'Sturend': 'bg-blue-100 text-blue-800 border-blue-200',
-  'Adaptief': 'bg-green-100 text-green-800 border-green-200',
+const badgeColors: Record<MaturityLevel, { bg: string; text: string; border: string }> = {
+  'Ad hoc':         { bg: '#FEF2F2', text: '#991B1B', border: '#FECACA' },
+  'Bewust':         { bg: '#FFF7ED', text: '#92400E', border: '#FED7AA' },
+  'Gestructureerd': { bg: '#FEFCE8', text: '#713F12', border: '#FDE68A' },
+  'Sturend':        { bg: '#EFF6FF', text: '#1E3A5F', border: '#5BC4A0' },
+  'Adaptief':       { bg: '#F0FDF8', text: '#065F46', border: '#5BC4A0' },
 };
 
 interface MaturityBadgeProps {
@@ -21,10 +21,12 @@ export default function MaturityBadge({ level, size = 'md' }: MaturityBadgeProps
     md: 'text-sm px-3 py-1',
     lg: 'text-base px-4 py-1.5 font-semibold',
   };
+  const { bg, text, border } = badgeColors[level];
 
   return (
     <span
-      className={`inline-block rounded-full border font-medium ${badgeColors[level]} ${sizeClasses[size]}`}
+      className={`inline-block rounded-full border font-medium ${sizeClasses[size]}`}
+      style={{ backgroundColor: bg, color: text, borderColor: border }}
     >
       {level}
     </span>

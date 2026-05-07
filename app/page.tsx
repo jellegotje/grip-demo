@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import WaveDecoration from '@/components/WaveDecoration';
 
 export default function HomePage() {
   return (
@@ -7,7 +8,7 @@ export default function HomePage() {
       <div className="text-center py-12">
         <span
           className="inline-block text-sm font-semibold px-3 py-1 rounded-full mb-6"
-          style={{ backgroundColor: '#E8F0F8', color: '#1E3A5F' }}
+          style={{ backgroundColor: '#EBF8F4', color: '#5BC4A0' }}
         >
           Gratis demo
         </span>
@@ -20,8 +21,7 @@ export default function HomePage() {
         </p>
         <Link
           href="/assessment"
-          className="inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: '#1E3A5F' }}
+          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md"
         >
           Start gratis meting
         </Link>
@@ -80,14 +80,18 @@ export default function HomePage() {
       </div>
 
       {/* CTA bottom */}
-      <div className="text-center mt-10">
+      <div className="text-center mt-10 mb-4">
         <Link
           href="/assessment"
-          className="inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: '#1E3A5F' }}
+          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md"
         >
           Start gratis meting
         </Link>
+      </div>
+
+      {/* Golflijnen decoratie */}
+      <div className="mt-16 -mx-4 overflow-hidden">
+        <WaveDecoration className="h-20" />
       </div>
     </div>
   );
@@ -107,10 +111,7 @@ function StepCard({
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm">
       <div className="text-3xl mb-3">{icon}</div>
-      <div
-        className="text-xs font-bold uppercase tracking-widest mb-1"
-        style={{ color: '#1E3A5F', opacity: 0.5 }}
-      >
+      <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#5BC4A0' }}>
         Stap {step}
       </div>
       <h3 className="font-bold text-lg mb-2" style={{ color: '#1E3A5F' }}>
