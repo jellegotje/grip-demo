@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="border-t border-gray-100 mt-12">
           <div className="max-w-5xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <Image src="/logo.png" alt="Native Consulting" width={100} height={28} style={{ objectFit: 'contain', opacity: 0.6 }} />
-            <p className="text-sm text-gray-400">© 2025 Native Consulting</p>
+            <p className="text-sm text-gray-400">© 2026 Native Consulting</p>
             <p className="text-sm italic" style={{ color: '#5BC4A0' }}>Voel je verbonden</p>
           </div>
         </footer>

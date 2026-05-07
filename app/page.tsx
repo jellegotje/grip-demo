@@ -46,7 +46,7 @@ export default function HomePage() {
           step="3"
           icon="🤖"
           title="AI-advies"
-          description="Ontvang een persoonlijke analyse met sterke punten en verbeterstappen, gegenereerd door Claude."
+          description="Ontvang een persoonlijke analyse met sterke punten en verbeterstappen, gegenereerd door AI."
         />
       </div>
 

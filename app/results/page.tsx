@@ -125,7 +125,7 @@ export default function ResultsPage() {
           <h2 className="font-bold text-lg" style={{ color: '#1E3A5F' }}>
             AI-analyse
           </h2>
-          <span className="text-xs text-gray-400">Gegenereerd door Claude (Anthropic)</span>
+          <span className="text-xs text-gray-400">Gegenereerd door AI</span>
         </div>
 
         {loadingAnalyse && (
@@ -134,7 +134,7 @@ export default function ResultsPage() {
               className="animate-spin rounded-full h-5 w-5 border-2 border-t-transparent flex-shrink-0"
               style={{ borderColor: '#1E3A5F', borderTopColor: 'transparent' }}
             />
-            <span className="text-gray-500">Claude analyseert uw resultaten...</span>
+            <span className="text-gray-500">AI analyseert uw resultaten...</span>
           </div>
         )}
 
