@@ -26,6 +26,19 @@ export default function HomePage() {
           Start gratis meting
         </Link>
         <p className="text-sm text-gray-400 mt-3">Duurt ca. 5 minuten · Geen registratie vereist</p>
+        <p className="text-xs text-gray-400 mt-4 max-w-md mx-auto leading-relaxed">
+          Uw antwoorden worden anoniem verwerkt. Alleen uw organisatietype, organisatiegrootte en
+          scores worden gebruikt voor de AI-analyse. Gegevens worden niet opgeslagen en niet
+          gebruikt voor het trainen van AI-modellen.{' '}
+          <a
+            href="https://www.anthropic.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-600"
+          >
+            Meer informatie: Anthropic Privacy Policy
+          </a>
+        </p>
       </div>
 
       {/* Steps */}

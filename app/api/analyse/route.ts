@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
   const prompt = `Je bent een adviseur gegevenskwaliteit voor lokale overheden in Nederland.
 
-Een medewerker van ${organisatieContext.naam} (${organisatieContext.type}, ${organisatieContext.medewerkers} medewerkers) heeft een korte volwassenheidsmeting ingevuld.
+Een medewerker van een Nederlandse ${organisatieContext.type} met ${organisatieContext.medewerkers} medewerkers heeft een volwassenheidsmeting ingevuld.
 
 Resultaten:
 - Totaalscore: ${totalScore.toFixed(1)} / 5.0 → Niveau: ${maturityLevel}
