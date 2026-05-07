@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(sleep 4 && cat /c/Users/gotje/AppData/Local/Temp/claude/C--grip-demo/91b21df3-c31f-4291-b941-1de03ba1e279/tasks/bpiag33lj.output 2>/dev/null | tail -10)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
+    ]
+  }
+}
