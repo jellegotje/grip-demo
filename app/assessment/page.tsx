@@ -27,10 +27,7 @@ export default function AssessmentPage() {
 
   function handleSubmit() {
     if (!kanDoorgaan) return;
-    sessionStorage.setItem(
-      'gripData',
-      JSON.stringify({ organisatie, antwoorden })
-    );
+    sessionStorage.setItem('gripData', JSON.stringify({ organisatie, antwoorden }));
     router.push('/results');
   }
 
@@ -40,7 +37,7 @@ export default function AssessmentPage() {
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1E3A5F' }}>
           Datakwaliteitsmeting
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-700">
           Vul uw organisatiegegevens in en beantwoord de 8 vragen om uw volwassenheidsscore te
           ontvangen.
         </p>
@@ -58,49 +55,54 @@ export default function AssessmentPage() {
         </h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Naam organisatie <span className="text-red-500">*</span>
+            <label htmlFor="org-naam" className="block text-sm font-medium text-gray-700 mb-1">
+              Naam organisatie <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(verplicht)</span>
             </label>
             <input
+              id="org-naam"
               type="text"
               value={organisatie.naam}
               onChange={(e) => setOrganisatie({ ...organisatie, naam: e.target.value })}
               placeholder="bijv. Gemeente Voorbeeldstad"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+              autoComplete="organization"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-transparent"
               style={{ '--tw-ring-color': '#1E3A5F' } as React.CSSProperties}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type overheid <span className="text-red-500">*</span>
+            <label htmlFor="org-type" className="block text-sm font-medium text-gray-700 mb-1">
+              Type overheid <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(verplicht)</span>
             </label>
             <select
+              id="org-type"
               value={organisatie.type}
               onChange={(e) => setOrganisatie({ ...organisatie, type: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-transparent bg-white"
+              style={{ '--tw-ring-color': '#1E3A5F' } as React.CSSProperties}
             >
               <option value="">Selecteer type</option>
               {TYPE_OVERHEID_OPTIES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
+                <option key={t} value={t}>{t}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Aantal medewerkers <span className="text-red-500">*</span>
+            <label htmlFor="org-medewerkers" className="block text-sm font-medium text-gray-700 mb-1">
+              Aantal medewerkers <span className="text-red-500" aria-hidden="true">*</span>
+              <span className="sr-only">(verplicht)</span>
             </label>
             <select
+              id="org-medewerkers"
               value={organisatie.medewerkers}
               onChange={(e) => setOrganisatie({ ...organisatie, medewerkers: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-transparent bg-white"
+              style={{ '--tw-ring-color': '#1E3A5F' } as React.CSSProperties}
             >
               <option value="">Selecteer grootte</option>
               {MEDEWERKERS_OPTIES.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
+                <option key={m} value={m}>{m}</option>
               ))}
             </select>
           </div>
@@ -116,25 +118,28 @@ export default function AssessmentPage() {
               <span
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
                 style={{ backgroundColor: '#1E3A5F' }}
+                aria-hidden="true"
               >
                 {dim.code}
               </span>
               <div>
                 <h2 className="font-bold text-base text-gray-900">{dim.naam}</h2>
-                <p className="text-xs text-gray-500">{dim.beschrijving}</p>
+                <p className="text-xs text-gray-700">{dim.beschrijving}</p>
               </div>
             </div>
 
             <div className="space-y-6">
               {vragenVoorDim.map((vraag) => (
-                <div key={vraag.id}>
-                  <p className="font-medium text-gray-800 mb-3 text-sm">{vraag.tekst}</p>
+                <fieldset key={vraag.id}>
+                  <legend className="font-medium text-gray-800 mb-3 text-sm">{vraag.tekst}</legend>
                   <div className="space-y-2">
                     {vraag.opties.map((optie) => {
+                      const inputId = `${vraag.id}-${optie.value}`;
                       const geselecteerd = antwoorden[vraag.id] === optie.value;
                       return (
                         <label
                           key={optie.value}
+                          htmlFor={inputId}
                           className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
                             geselecteerd
                               ? 'border-blue-900 bg-blue-50'
@@ -142,6 +147,7 @@ export default function AssessmentPage() {
                           }`}
                         >
                           <input
+                            id={inputId}
                             type="radio"
                             name={vraag.id}
                             value={optie.value}
@@ -149,12 +155,14 @@ export default function AssessmentPage() {
                             onChange={() =>
                               setAntwoorden({ ...antwoorden, [vraag.id]: optie.value })
                             }
-                            className="sr-only"
+                            className="sr-only focus:not-sr-only focus:w-4 focus:h-4 focus:ring-2 focus:ring-offset-2"
+                            style={{ '--tw-ring-color': '#1E3A5F' } as React.CSSProperties}
                           />
                           <span
                             className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                               geselecteerd ? 'border-blue-900' : 'border-gray-300'
                             }`}
+                            aria-hidden="true"
                           >
                             {geselecteerd && (
                               <span
@@ -163,7 +171,7 @@ export default function AssessmentPage() {
                               />
                             )}
                           </span>
-                          <span className="text-xs text-gray-400 font-medium w-4 flex-shrink-0">
+                          <span className="text-xs text-gray-600 font-medium w-4 flex-shrink-0" aria-hidden="true">
                             {optie.value}
                           </span>
                           <span className="text-sm text-gray-700">{optie.label}</span>
@@ -171,7 +179,7 @@ export default function AssessmentPage() {
                       );
                     })}
                   </div>
-                </div>
+                </fieldset>
               ))}
             </div>
           </div>
@@ -181,7 +189,7 @@ export default function AssessmentPage() {
       {/* Submit */}
       <div className="mt-6 mb-12">
         {!kanDoorgaan && (
-          <p className="text-sm text-gray-400 text-center mb-3">
+          <p className="text-sm text-gray-700 text-center mb-3" role="status" aria-live="polite">
             {!alleFeldenIngevuld
               ? 'Vul eerst uw organisatiegegevens in.'
               : `Beantwoord nog ${VRAGEN.length - beantwoord} ${
@@ -192,12 +200,17 @@ export default function AssessmentPage() {
         <button
           onClick={handleSubmit}
           disabled={!kanDoorgaan}
-          className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
+          className={`w-full py-4 rounded-xl font-semibold text-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 ${
             kanDoorgaan
-              ? 'text-white hover:opacity-90 shadow-md cursor-pointer'
+              ? 'text-white shadow-md cursor-pointer hover:opacity-90'
               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
-          style={kanDoorgaan ? { backgroundColor: '#1E3A5F' } : {}}
+          style={
+            kanDoorgaan
+              ? ({ backgroundColor: '#1E3A5F', '--tw-ring-color': '#1E3A5F' } as React.CSSProperties)
+              : {}
+          }
+          aria-disabled={!kanDoorgaan}
         >
           Bekijk mijn resultaten →
         </button>

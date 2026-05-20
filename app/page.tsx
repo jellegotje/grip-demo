@@ -21,11 +21,11 @@ export default function HomePage() {
         </p>
         <Link
           href="/assessment"
-          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md"
+          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A5F]"
         >
           Start gratis meting
         </Link>
-        <p className="text-sm text-gray-400 mt-3">Duurt ca. 5 minuten · Geen registratie vereist</p>
+        <p className="text-sm text-gray-700 mt-3">Duurt ca. 5 minuten · Geen registratie vereist</p>
         <p className="text-xs text-gray-400 mt-4 max-w-md mx-auto leading-relaxed">
           Uw antwoorden worden anoniem verwerkt. Alleen uw organisatietype, organisatiegrootte en
           scores worden gebruikt voor de AI-analyse. Gegevens worden niet opgeslagen en niet
@@ -96,7 +96,7 @@ export default function HomePage() {
       <div className="text-center mt-10 mb-4">
         <Link
           href="/assessment"
-          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md"
+          className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A5F]"
         >
           Start gratis meting
         </Link>
@@ -130,7 +130,7 @@ function StepCard({
       <h3 className="font-bold text-lg mb-2" style={{ color: '#1E3A5F' }}>
         {title}
       </h3>
-      <p className="text-sm text-gray-600">{description}</p>
+      <p className="text-sm text-gray-700">{description}</p>
     </div>
   );
 }
@@ -154,7 +154,7 @@ function DimensionInfo({
       </span>
       <div>
         <div className="font-semibold text-gray-900 text-sm">{naam}</div>
-        <div className="text-sm text-gray-500">{beschrijving}</div>
+        <div className="text-sm text-gray-700">{beschrijving}</div>
       </div>
     </div>
   );

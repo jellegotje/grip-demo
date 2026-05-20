@@ -200,7 +200,7 @@ export default function ResultsPage() {
           href="https://www.nativeconsulting.nl/contact"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-white font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="inline-block bg-white font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
           style={{ color: '#1E3A5F' }}
         >
           Neem contact op
@@ -208,7 +208,7 @@ export default function ResultsPage() {
       </div>
 
       <div className="text-center mb-8">
-        <Link href="/assessment" className="text-sm text-gray-500 hover:text-gray-700 underline">
+        <Link href="/assessment" className="text-sm text-gray-700 hover:text-gray-900 underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A5F] rounded">
           ← Opnieuw beginnen
         </Link>
       </div>
