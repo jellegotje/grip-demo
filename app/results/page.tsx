@@ -32,46 +32,29 @@ export default function ResultsPage() {
 
     setLoadingAnalyse(true);
 
-    const streamAnalyse = async () => {
-      try {
-        const res = await fetch('/api/analyse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            organisatieContext: {
-              naam: parsed.organisatie.naam,
-              type: parsed.organisatie.type,
-              medewerkers: parsed.organisatie.medewerkers,
-            },
-            dimensionScores: r.dimensionScores,
-            totalScore: r.totalScore,
-            maturityLevel: r.maturityLevel,
-          }),
-        });
-
-        if (!res.ok || !res.body) {
-          setAnalyseError(true);
-          setLoadingAnalyse(false);
-          return;
-        }
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          if (chunk) setAnalyse((prev) => prev + chunk);
-        }
+    fetch('/api/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        organisatieContext: {
+          naam: parsed.organisatie.naam,
+          type: parsed.organisatie.type,
+          medewerkers: parsed.organisatie.medewerkers,
+        },
+        dimensionScores: r.dimensionScores,
+        totalScore: r.totalScore,
+        maturityLevel: r.maturityLevel,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        setAnalyse(json.analysis ?? '');
         setLoadingAnalyse(false);
-      } catch {
+      })
+      .catch(() => {
         setAnalyseError(true);
         setLoadingAnalyse(false);
-      }
-    };
-
-    streamAnalyse();
+      });
   }, [router]);
 
   if (!data || !results) {
@@ -145,43 +128,45 @@ export default function ResultsPage() {
           <span className="text-xs text-gray-400">Gegenereerd door AI</span>
         </div>
 
-        {analyseError ? (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+        {loadingAnalyse && (
+          <div className="flex items-center gap-3 py-8" role="status" aria-live="polite">
+            <div
+              className="animate-spin rounded-full h-5 w-5 border-2 border-t-transparent flex-shrink-0"
+              style={{ borderColor: '#1E3A5F', borderTopColor: 'transparent' }}
+              aria-hidden="true"
+            />
+            <span className="text-gray-700">AI analyseert uw resultaten...</span>
+          </div>
+        )}
+
+        {analyseError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700" role="alert">
             De analyse kon niet worden geladen. Controleer uw API-sleutel en probeer het opnieuw.
           </div>
-        ) : (
-          <div>
-            {analyse && (
-              <ReactMarkdown
-                components={{
-                  h2: ({ children }) => (
-                    <h3 className="font-semibold text-gray-900 mt-5 mb-2 first:mt-0">{children}</h3>
-                  ),
-                  p: ({ children }) => (
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">{children}</p>
-                  ),
-                  ul: ({ children }) => (
-                    <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>
-                  ),
-                  li: ({ children }) => (
-                    <li className="text-sm text-gray-700 leading-relaxed">{children}</li>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="font-semibold text-gray-900">{children}</strong>
-                  ),
-                }}
-              >
-                {analyse}
-              </ReactMarkdown>
-            )}
-            {loadingAnalyse && (
-              <span
-                className="inline-block w-[2px] h-4 align-middle ml-0.5 animate-grip-blink"
-                style={{ backgroundColor: '#1E3A5F' }}
-                aria-label="AI analyseert uw resultaten..."
-              />
-            )}
-          </div>
+        )}
+
+        {!loadingAnalyse && !analyseError && analyse && (
+          <ReactMarkdown
+            components={{
+              h2: ({ children }) => (
+                <h3 className="font-semibold text-gray-900 mt-5 mb-2 first:mt-0">{children}</h3>
+              ),
+              p: ({ children }) => (
+                <p className="text-sm text-gray-700 leading-relaxed mb-2">{children}</p>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>
+              ),
+              li: ({ children }) => (
+                <li className="text-sm text-gray-700 leading-relaxed">{children}</li>
+              ),
+              strong: ({ children }) => (
+                <strong className="font-semibold text-gray-900">{children}</strong>
+              ),
+            }}
+          >
+            {analyse}
+          </ReactMarkdown>
         )}
       </div>
 

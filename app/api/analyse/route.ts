@@ -139,41 +139,19 @@ Score: ${dimensionScores.D4.toFixed(1)}. Geef minimaal 3 concrete aanbevelingen 
 **Eerste stap**
 1 concrete, morgen uitvoerbare actie voor de dimensie met de laagste score. Noem een verantwoordelijke rol en een realistisch tijdpad.
 
-Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Verwijs expliciet naar de scores. Schrijf voor een informatiemanager of CIO van een ${organisatieContext.type}.`;
+Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Verwijs expliciet naar de scores. Schrijf voor een informatiemanager of CIO van een ${organisatieContext.type}.
+
+Behandel verplicht alle vier de dimensies D1, D2, D3 en D4 elk in een aparte sectie. Sluit altijd af met een volledige sectie Eerste stap. Geef per dimensie maximaal 3 aanbevelingen van elk maximaal 60 woorden.`;
 
   try {
-    const upstream = client.messages.stream({
+    const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 2048,
+      max_tokens: 1500,
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const encoder = new TextEncoder();
-    const readable = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const event of upstream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
-              controller.enqueue(encoder.encode(event.delta.text));
-            }
-          }
-          controller.close();
-        } catch (err) {
-          console.error('Anthropic stream error:', err);
-          controller.error(err);
-        }
-      },
-    });
-
-    return new Response(readable, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-      },
-    });
+    const text = message.content[0].type === 'text' ? message.content[0].text : '';
+    return NextResponse.json({ analysis: text });
   } catch (error) {
     console.error('Anthropic API error:', error);
     return NextResponse.json({ error: 'Analyse niet beschikbaar' }, { status: 500 });
