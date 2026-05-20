@@ -1,14 +1,110 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
+import { bepaalVolwassenheidsniveau } from '@/lib/scoring';
+
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+
+function getClientIp(req: NextRequest): string {
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim();
+  }
+  return req.headers.get('x-real-ip') ?? 'unknown';
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitStore.get(ip);
+
+  if (!entry || now >= entry.resetAt) {
+    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return true;
+  }
+
+  entry.count += 1;
+  return false;
+}
+
+const VALID_TYPES = ['Gemeente', 'Waterschap', 'Provincie', 'Gemeenschappelijke regeling', 'Anders'];
+const VALID_MEDEWERKERS = ['< 100', '100–500', '500–2000', '> 2000'];
+const DIMENSION_KEYS = ['D1', 'D2', 'D3', 'D4'] as const;
+
+function isValidScore(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 1 && value <= 5;
+}
+
+function validatePayload(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return 'Ongeldige request body.';
+
+  const { organisatieContext, dimensionScores, totalScore } = body as Record<string, unknown>;
+
+  if (!organisatieContext || typeof organisatieContext !== 'object') {
+    return 'organisatieContext ontbreekt of is ongeldig.';
+  }
+  const ctx = organisatieContext as Record<string, unknown>;
+  if (typeof ctx.type !== 'string' || !VALID_TYPES.includes(ctx.type)) {
+    return 'Ongeldig type overheid.';
+  }
+  if (typeof ctx.medewerkers !== 'string' || !VALID_MEDEWERKERS.includes(ctx.medewerkers)) {
+    return 'Ongeldig aantal medewerkers.';
+  }
+
+  if (!dimensionScores || typeof dimensionScores !== 'object') {
+    return 'dimensionScores ontbreekt of is ongeldig.';
+  }
+  const scores = dimensionScores as Record<string, unknown>;
+  for (const key of DIMENSION_KEYS) {
+    if (!isValidScore(scores[key])) {
+      return `Ongeldige score voor ${key} (verwacht een getal tussen 1.0 en 5.0).`;
+    }
+  }
+
+  if (!isValidScore(totalScore)) {
+    return 'Ongeldige totalScore (verwacht een getal tussen 1.0 en 5.0).';
+  }
+
+  return null;
+}
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Te veel verzoeken. Probeer het over een uur opnieuw.' },
+      { status: 429 },
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Ongeldige JSON.' }, { status: 400 });
+  }
+
+  const validationError = validatePayload(body);
+  if (validationError) {
+    return NextResponse.json({ error: validationError }, { status: 400 });
+  }
+
   console.log('KEY AANWEZIG:', !!process.env.ANTHROPIC_API_KEY);
 
   const client = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
   });
 
-  const { organisatieContext, dimensionScores, totalScore, maturityLevel } = await req.json();
+  const { organisatieContext, dimensionScores, totalScore } = body as {
+    organisatieContext: { type: string; medewerkers: string };
+    dimensionScores: { D1: number; D2: number; D3: number; D4: number };
+    totalScore: number;
+  };
+  const maturityLevel = bepaalVolwassenheidsniveau(totalScore);
 
   const prompt = `Je bent een adviseur gegevenskwaliteit voor lokale overheden in Nederland.
 
@@ -46,13 +142,38 @@ Score: ${dimensionScores.D4.toFixed(1)}. Geef minimaal 3 concrete aanbevelingen 
 Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Verwijs expliciet naar de scores. Schrijf voor een informatiemanager of CIO van een ${organisatieContext.type}.`;
 
   try {
-    const message = await client.messages.create({
+    const upstream = client.messages.stream({
       model: 'claude-sonnet-4-6',
       max_tokens: 2048,
       messages: [{ role: 'user', content: prompt }],
     });
-    const text = message.content[0].type === 'text' ? message.content[0].text : '';
-    return NextResponse.json({ analysis: text });
+
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const event of upstream) {
+            if (
+              event.type === 'content_block_delta' &&
+              event.delta.type === 'text_delta'
+            ) {
+              controller.enqueue(encoder.encode(event.delta.text));
+            }
+          }
+          controller.close();
+        } catch (err) {
+          console.error('Anthropic stream error:', err);
+          controller.error(err);
+        }
+      },
+    });
+
+    return new Response(readable, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+      },
+    });
   } catch (error) {
     console.error('Anthropic API error:', error);
     return NextResponse.json({ error: 'Analyse niet beschikbaar' }, { status: 500 });

@@ -16,3 +16,12 @@ body {
 .btn-primary:hover {
   background-color: #5BC4A0;
 }
+
+@keyframes grip-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.animate-grip-blink {
+  animation: grip-blink 1s steps(1, end) infinite;
+}
