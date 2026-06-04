@@ -17,6 +17,7 @@ export default function ResultsPage() {
   const [results, setResults] = useState<AssessmentResults | null>(null);
   const [analyse, setAnalyse] = useState<string>('');
   const [loadingAnalyse, setLoadingAnalyse] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [analyseError, setAnalyseError] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,8 @@ export default function ResultsPage() {
     setResults(r);
 
     setLoadingAnalyse(true);
+    setAnalyse('');
+    setAnalyseError(false);
 
     fetch('/api/analyse', {
       method: 'POST',
@@ -46,13 +49,36 @@ export default function ResultsPage() {
         maturityLevel: r.maturityLevel,
       }),
     })
-      .then((res) => res.json())
-      .then((json) => {
-        setAnalyse(json.analysis ?? '');
+      .then(async (res) => {
+        if (!res.ok || !res.body) {
+          throw new Error('Analyse niet beschikbaar');
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let receivedAny = false;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          if (!chunk) continue;
+
+          if (!receivedAny) {
+            receivedAny = true;
+            setLoadingAnalyse(false);
+            setStreaming(true);
+          }
+          setAnalyse((prev) => prev + chunk);
+        }
+
+        setStreaming(false);
         setLoadingAnalyse(false);
       })
       .catch(() => {
         setAnalyseError(true);
+        setStreaming(false);
         setLoadingAnalyse(false);
       });
   }, [router]);
@@ -119,13 +145,12 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      {/* Sectie 3: AI-analyse */}
+      {/* Sectie 3: Analyse */}
       <div className="bg-white rounded-2xl border border-gray-200 p-8 mb-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-bold text-lg" style={{ color: '#1E3A5F' }}>
-            AI-analyse
+            Analyse
           </h2>
-          <span className="text-xs text-gray-400">Gegenereerd door AI</span>
         </div>
 
         {loadingAnalyse && (
@@ -135,7 +160,7 @@ export default function ResultsPage() {
               style={{ borderColor: '#1E3A5F', borderTopColor: 'transparent' }}
               aria-hidden="true"
             />
-            <span className="text-gray-700">AI analyseert uw resultaten...</span>
+            <span className="text-gray-700">Uw resultaten worden geanalyseerd...</span>
           </div>
         )}
 
@@ -146,6 +171,7 @@ export default function ResultsPage() {
         )}
 
         {!loadingAnalyse && !analyseError && analyse && (
+          <div aria-live="polite">
           <ReactMarkdown
             components={{
               h2: ({ children }) => (
@@ -167,6 +193,14 @@ export default function ResultsPage() {
           >
             {analyse}
           </ReactMarkdown>
+          {streaming && (
+            <span
+              className="inline-block w-[2px] h-4 ml-0.5 align-text-bottom animate-pulse"
+              style={{ backgroundColor: '#1E3A5F' }}
+              aria-hidden="true"
+            />
+          )}
+          </div>
         )}
       </div>
 

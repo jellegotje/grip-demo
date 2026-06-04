@@ -12,6 +12,8 @@ import { DimensionScores } from '@/lib/types';
 
 interface RadarChartProps {
   scores: DimensionScores;
+  height?: number;
+  outerRadius?: number;
 }
 
 const LABELS: Record<string, string[]> = {
@@ -56,7 +58,11 @@ function MultiLineLabel({
   );
 }
 
-export default function DimensieRadarChart({ scores }: RadarChartProps) {
+export default function DimensieRadarChart({
+  scores,
+  height = 340,
+  outerRadius = 90,
+}: RadarChartProps) {
   const data = [
     { dimensie: 'D1', score: scores.D1, fullMark: 5 },
     { dimensie: 'D2', score: scores.D2, fullMark: 5 },
@@ -66,10 +72,10 @@ export default function DimensieRadarChart({ scores }: RadarChartProps) {
 
   return (
     <div className="w-full py-4 px-6">
-      <ResponsiveContainer width="100%" height={340}>
+      <ResponsiveContainer width="100%" height={height}>
         <RadarChart
           data={data}
-          outerRadius={90}
+          outerRadius={outerRadius}
           margin={{ top: 30, right: 60, bottom: 30, left: 60 }}
         >
           <PolarGrid stroke="#e5e7eb" strokeWidth={1} />

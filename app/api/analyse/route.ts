@@ -143,17 +143,37 @@ Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Verwijs explicie
 
 Behandel verplicht alle vier de dimensies D1, D2, D3 en D4 elk in een aparte sectie. Sluit altijd af met een volledige sectie Eerste stap. Geef per dimensie maximaal 3 aanbevelingen van elk maximaal 60 woorden.`;
 
-  try {
-    const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
-    });
+  const encoder = new TextEncoder();
+  const readable = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        const stream = client.messages.stream({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: prompt }],
+        });
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : '';
-    return NextResponse.json({ analysis: text });
-  } catch (error) {
-    console.error('Anthropic API error:', error);
-    return NextResponse.json({ error: 'Analyse niet beschikbaar' }, { status: 500 });
-  }
+        for await (const event of stream) {
+          if (
+            event.type === 'content_block_delta' &&
+            event.delta.type === 'text_delta'
+          ) {
+            controller.enqueue(encoder.encode(event.delta.text));
+          }
+        }
+
+        controller.close();
+      } catch (error) {
+        console.error('Anthropic API error:', error);
+        controller.error(error);
+      }
+    },
+  });
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'no-cache, no-transform',
+    },
+  });
 }

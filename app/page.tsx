@@ -27,11 +27,15 @@ export default function HomePage() {
         </p>
 
         {/* Voorbeeldresultaat radar chart */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-10 shadow-sm max-w-md mx-auto">
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-10 shadow-sm max-w-[300px] mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#5BC4A0' }}>
             Voorbeeldresultaat
           </div>
-          <DimensieRadarChart scores={{ D1: 2.5, D2: 3.5, D3: 2.0, D4: 3.0 }} />
+          <DimensieRadarChart
+            scores={{ D1: 2.5, D2: 3.5, D3: 2.0, D4: 3.0 }}
+            height={200}
+            outerRadius={55}
+          />
         </div>
 
         <Link
@@ -45,16 +49,8 @@ export default function HomePage() {
         </p>
         <p className="text-xs text-gray-400 mt-4 max-w-md mx-auto leading-relaxed">
           Uw antwoorden worden anoniem verwerkt. Alleen uw organisatietype, organisatiegrootte en
-          scores worden gebruikt voor de AI-analyse. Gegevens worden niet opgeslagen en niet
-          gebruikt voor het trainen van AI-modellen.{' '}
-          <a
-            href="https://www.anthropic.com/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-gray-600"
-          >
-            Meer informatie: Anthropic Privacy Policy
-          </a>
+          scores worden gebruikt voor de analyse. Gegevens worden niet opgeslagen en niet gebruikt
+          voor het trainen van AI-modellen.
         </p>
       </div>
 
