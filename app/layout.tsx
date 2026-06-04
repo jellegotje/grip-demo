@@ -5,7 +5,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Grip op Gegevenskwaliteit – Native Consulting',
   description:
-    'Meet de datakwaliteitsvolwassenheid van uw organisatie in 5 minuten. Gratis demo van Native Consulting.',
+    'Meet de (kern)gegevenskwaliteitsvolwassenheid van uw organisatie in 5 minuten. Gratis demo van Native Consulting.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -52,7 +52,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               style={{ objectFit: 'contain', opacity: 0.6 }}
             />
             <p className="text-sm text-gray-600">© 2026 Native Consulting</p>
-            <p className="text-sm italic" style={{ color: '#5BC4A0' }}>Voel je verbonden</p>
+            <p className="text-sm italic max-w-xs text-center sm:text-right" style={{ color: '#5BC4A0' }}>
+              Native Consulting helpt lokale overheden grip krijgen op informatie, data en
+              digitalisering.
+            </p>
           </div>
         </footer>
       </body>

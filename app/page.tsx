@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import WaveDecoration from '@/components/WaveDecoration';
+import DimensieRadarChart from '@/components/RadarChart';
 
 export default function HomePage() {
   return (
@@ -13,19 +14,35 @@ export default function HomePage() {
           Gratis demo
         </span>
         <h1 className="text-4xl font-bold mb-4" style={{ color: '#1E3A5F' }}>
-          Hoe volwassen is uw datakwaliteit?
+          Hoe volwassen is uw (kern)gegevenskwaliteit?
         </h1>
-        <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-          Beantwoord 8 vragen en ontvang direct een persoonlijke analyse van uw
-          datakwaliteitsvolwassenheid – gegenereerd door AI.
+        <p className="text-xl text-gray-600 mb-4 leading-relaxed">
+          Beantwoord 9 vragen en ontdek direct hoe volwassen uw organisatie is op
+          (kern)gegevenskwaliteit, structuur, governance en cultuur. U ontvangt een persoonlijke
+          analyse met uw score, sterke punten en concrete verbeterstappen.
         </p>
+        <p className="text-base text-gray-500 mb-8 leading-relaxed">
+          Ontwikkeld voor gemeenten, provincies, waterschappen en samenwerkingsverbanden die willen
+          weten waar ze staan in hun (kern)gegevenskwaliteit.
+        </p>
+
+        {/* Voorbeeldresultaat radar chart */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-10 shadow-sm max-w-md mx-auto">
+          <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#5BC4A0' }}>
+            Voorbeeldresultaat
+          </div>
+          <DimensieRadarChart scores={{ D1: 2.5, D2: 3.5, D3: 2.0, D4: 3.0 }} />
+        </div>
+
         <Link
           href="/assessment"
           className="btn-primary inline-block text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A5F]"
         >
           Start gratis meting
         </Link>
-        <p className="text-sm text-gray-700 mt-3">Duurt ca. 5 minuten · Geen registratie vereist</p>
+        <p className="text-sm text-gray-700 mt-3">
+          Duurt ca. 5 minuten, geen registratie vereist, direct resultaat.
+        </p>
         <p className="text-xs text-gray-400 mt-4 max-w-md mx-auto leading-relaxed">
           Uw antwoorden worden anoniem verwerkt. Alleen uw organisatietype, organisatiegrootte en
           scores worden gebruikt voor de AI-analyse. Gegevens worden niet opgeslagen en niet
@@ -47,7 +64,7 @@ export default function HomePage() {
           step="1"
           icon="📋"
           title="Meting"
-          description="Beantwoord 8 gerichte vragen over 4 dimensies van datakwaliteitsvolwassenheid."
+          description="Beantwoord 9 gerichte vragen over 4 dimensies van (kern)gegevenskwaliteitsvolwassenheid."
         />
         <StepCard
           step="2"
@@ -58,8 +75,8 @@ export default function HomePage() {
         <StepCard
           step="3"
           icon="🤖"
-          title="AI-advies"
-          description="Ontvang een persoonlijke analyse met sterke punten en verbeterstappen, gegenereerd door AI."
+          title="Persoonlijk advies"
+          description="Ontvang een korte analyse met sterke punten, aandachtspunten en concrete vervolgstappen."
         />
       </div>
 
@@ -77,12 +94,12 @@ export default function HomePage() {
           <DimensionInfo
             code="D2"
             naam="Structuur & betekenis"
-            beschrijving="Definities, metadata en gegevenscatalogus"
+            beschrijving="Definities, metadata en (kern)gegevenscatalogus"
           />
           <DimensionInfo
             code="D3"
             naam="Governance"
-            beschrijving="Data-eigenaren, rollen en beleid"
+            beschrijving="(Kern)gegevens-eigenaren, rollen en beleid"
           />
           <DimensionInfo
             code="D4"

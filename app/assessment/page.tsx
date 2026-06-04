@@ -17,6 +17,8 @@ export default function AssessmentPage() {
 
   const [antwoorden, setAntwoorden] = useState<Antwoorden>({});
 
+  const [definitieOpen, setDefinitieOpen] = useState(false);
+
   const beantwoord = Object.keys(antwoorden).length;
   const alleFeldenIngevuld =
     organisatie.naam.trim() !== '' &&
@@ -35,12 +37,46 @@ export default function AssessmentPage() {
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1E3A5F' }}>
-          Datakwaliteitsmeting
+          (Kern)gegevenskwaliteitsmeting
         </h1>
         <p className="text-gray-700">
-          Vul uw organisatiegegevens in en beantwoord de 8 vragen om uw volwassenheidsscore te
+          Vul uw organisatiegegevens in en beantwoord de 9 vragen om uw volwassenheidsscore te
           ontvangen.
         </p>
+      </div>
+
+      {/* Definitiebox */}
+      <div
+        className="rounded-2xl border p-5 mb-8 flex gap-3"
+        style={{ backgroundColor: '#EFF4F9', borderColor: '#1E3A5F' }}
+      >
+        <span className="text-xl flex-shrink-0" aria-hidden="true">
+          ℹ️
+        </span>
+        <div className="flex-1">
+          <h2 className="font-bold text-base" style={{ color: '#1E3A5F' }}>
+            Wat zijn (kern)gegevens?
+          </h2>
+          {definitieOpen && (
+            <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+              Kerngegevens van een gemeente zijn de belangrijkste, objectieve gegevens en feiten over
+              een specifieke gemeente. Ze vormen een overzicht van de demografische, sociale en
+              geografische status van het gebied en worden gebruikt voor beleidsvorming, onderzoek en
+              informatievoorziening aan inwoners. Denk hierbij aan cijfers over aantallen inwoners,
+              demografische gegevens, wijkindelingen, cijfers over ingezette zorg, arbeidsmarktgegevens,
+              woningvoorraad, woningtypes etc.
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={() => setDefinitieOpen((v) => !v)}
+            aria-expanded={definitieOpen}
+            className="text-sm font-medium underline mt-2 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded"
+            style={{ color: '#1E3A5F', '--tw-ring-color': '#1E3A5F' } as React.CSSProperties}
+          >
+            {definitieOpen ? 'Minder informatie' : 'Meer informatie'}
+          </button>
+        </div>
       </div>
 
       {/* Progress */}

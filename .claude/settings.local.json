@@ -7,7 +7,11 @@
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "Bash(curl -s -o /tmp/body.txt -w '%{http_code}' -X POST http://localhost:3000/api/analyse -H 'Content-Type: application/json' -H 'X-Forwarded-For: 203.0.113.42' -d '{}')",
       "Read(//tmp/**)",
-      "Bash(grep -qE \"Ready|ready in|error\" \"C:\\\\\\\\Users\\\\\\\\JELLEG~1\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-JelleGotj--grip-demo\\\\\\\\64c9b79f-593d-47c3-8d3a-110b3e7e9943\\\\\\\\tasks\\\\\\\\bz4lu59pv.output\")"
+      "Bash(grep -qE \"Ready|ready in|error\" \"C:\\\\\\\\Users\\\\\\\\JELLEG~1\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-JelleGotj--grip-demo\\\\\\\\64c9b79f-593d-47c3-8d3a-110b3e7e9943\\\\\\\\tasks\\\\\\\\bz4lu59pv.output\")",
+      "Bash(curl -s -o NUL -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(findstr /C:\"Voorbeeldresultaat\" /C:\"kerngegevenskwaliteit\" /C:\"9 vragen\")",
+      "Bash(npx tsc *)"
     ]
   }
 }

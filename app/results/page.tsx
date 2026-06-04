@@ -98,7 +98,7 @@ export default function ResultsPage() {
             </div>
             <MaturityBadge level={maturityLevel} size="lg" />
             <p className="text-sm text-gray-500 mt-3 max-w-xs">
-              Gebaseerd op 8 vragen verdeeld over 4 dimensies.
+              Gebaseerd op 9 vragen verdeeld over 4 dimensies.
             </p>
           </div>
           <div className="flex-1 w-full">
