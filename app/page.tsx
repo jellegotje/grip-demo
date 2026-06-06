@@ -13,17 +13,17 @@ export default function HomePage() {
         >
           Gratis demo
         </span>
-        <h1 className="text-4xl font-bold mb-4" style={{ color: '#1E3A5F' }}>
-          Hoe volwassen is uw (kern)gegevenskwaliteit?
+        <h1 className="text-4xl font-bold mb-4 break-words hyphens-auto" style={{ color: '#1E3A5F' }}>
+          Hoe volwassen is uw (kern)gegevens&shy;kwaliteit?
         </h1>
         <p className="text-xl text-gray-600 mb-4 leading-relaxed">
           Beantwoord 9 vragen en ontdek direct hoe volwassen uw organisatie is op
-          (kern)gegevenskwaliteit, structuur, governance en cultuur. U ontvangt een persoonlijke
+          (kern)gegevens&shy;kwaliteit, structuur, governance en cultuur. U ontvangt een persoonlijke
           analyse met uw score, sterke punten en concrete verbeterstappen.
         </p>
         <p className="text-base text-gray-500 mb-8 leading-relaxed">
           Ontwikkeld voor gemeenten, provincies, waterschappen en samenwerkingsverbanden die willen
-          weten waar ze staan in hun (kern)gegevenskwaliteit.
+          weten waar ze staan in hun (kern)gegevens&shy;kwaliteit.
         </p>
 
         {/* Voorbeeldresultaat radar chart */}
@@ -60,7 +60,7 @@ export default function HomePage() {
           step="1"
           icon="📋"
           title="Meting"
-          description="Beantwoord 9 gerichte vragen over 4 dimensies van (kern)gegevenskwaliteitsvolwassenheid."
+          description="Beantwoord 9 gerichte vragen over 4 dimensies van (kern)gegevens&shy;kwaliteits&shy;volwassenheid."
         />
         <StepCard
           step="2"

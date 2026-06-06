@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import WaveDecoration from '@/components/WaveDecoration';
 import { SessionData, AssessmentResults } from '@/lib/types';
 import { berekenResultaten } from '@/lib/scoring';
+import { exporteerAnalysePdf } from '@/lib/pdf';
 import DimensieRadarChart from '@/components/RadarChart';
 import ScoreCard from '@/components/ScoreCard';
 import MaturityBadge from '@/components/MaturityBadge';
@@ -19,8 +20,32 @@ export default function ResultsPage() {
   const [loadingAnalyse, setLoadingAnalyse] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [analyseError, setAnalyseError] = useState(false);
+  const [exporteren, setExporteren] = useState(false);
+  const hasFetched = useRef(false);
+
+  async function handleExportPdf() {
+    if (!data || !results || !analyse) return;
+    setExporteren(true);
+    try {
+      await exporteerAnalysePdf({
+        organisatie: data.organisatie,
+        results,
+        analyse,
+      });
+    } catch (err) {
+      console.error('PDF-export mislukt:', err);
+    } finally {
+      setExporteren(false);
+    }
+  }
 
   useEffect(() => {
+    // Guard tegen dubbele aanroep door React Strict Mode (dev) en re-renders.
+    // Zonder deze guard lopen er twee fetches tegelijk en wordt de tekst
+    // dubbel/gemixt in de state geschreven.
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const raw = sessionStorage.getItem('gripData');
     if (!raw) {
       router.push('/assessment');
@@ -35,9 +60,12 @@ export default function ResultsPage() {
     setAnalyse('');
     setAnalyseError(false);
 
+    const controller = new AbortController();
+
     fetch('/api/analyse', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
       body: JSON.stringify({
         organisatieContext: {
           naam: parsed.organisatie.naam,
@@ -58,29 +86,46 @@ export default function ResultsPage() {
         const decoder = new TextDecoder();
         let receivedAny = false;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        try {
+          // Eén reader, één lus. We stoppen zodra done === true.
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-          const chunk = decoder.decode(value, { stream: true });
-          if (!chunk) continue;
+            const chunk = decoder.decode(value, { stream: true });
+            if (!chunk) continue;
 
-          if (!receivedAny) {
-            receivedAny = true;
-            setLoadingAnalyse(false);
-            setStreaming(true);
+            if (!receivedAny) {
+              receivedAny = true;
+              setLoadingAnalyse(false);
+              setStreaming(true);
+            }
+            setAnalyse((prev) => prev + chunk);
           }
-          setAnalyse((prev) => prev + chunk);
+        } finally {
+          // Sluit de stream netjes af, ook bij vroegtijdig afbreken.
+          reader.releaseLock();
         }
 
         setStreaming(false);
         setLoadingAnalyse(false);
       })
       .catch(() => {
+        // Een afgebroken fetch (unmount) is geen echte fout.
+        if (controller.signal.aborted) return;
         setAnalyseError(true);
         setStreaming(false);
         setLoadingAnalyse(false);
       });
+
+    // Cleanup: breek de in-flight stream af bij unmount.
+    // We resetten de guard zodat de "echte" mount (na Strict Mode's
+    // mount → cleanup → mount cyclus) opnieuw mag fetchen; de afgebroken
+    // eerste fetch schrijft niets meer naar de state, dus geen dubbeling.
+    return () => {
+      controller.abort();
+      hasFetched.current = false;
+    };
   }, [router]);
 
   if (!data || !results) {
@@ -201,6 +246,49 @@ export default function ResultsPage() {
             />
           )}
           </div>
+        )}
+
+        {!loadingAnalyse && !streaming && !analyseError && analyse && (
+          <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleExportPdf}
+              disabled={exporteren}
+              className="inline-flex items-center justify-center gap-2 font-semibold text-sm px-5 py-2.5 rounded-xl border-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A5F]"
+              style={{ borderColor: '#1E3A5F', color: '#1E3A5F' }}
+            >
+              {exporteren ? (
+                <>
+                  <span
+                    className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent"
+                    style={{ borderColor: '#1E3A5F', borderTopColor: 'transparent' }}
+                    aria-hidden="true"
+                  />
+                  PDF wordt gemaakt...
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="h-4 w-4"
+                    aria-hidden="true"
+                  >
+                    <path d="M10 1a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L9 10.586V2a1 1 0 0 1 1-1Z" />
+                    <path d="M3 14a1 1 0 0 1 1 1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-1a1 1 0 0 1 1-1Z" />
+                  </svg>
+                  Download analyse als PDF
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {!loadingAnalyse && !analyseError && analyse && (
+          <p className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
+            Deze analyse kan fouten bevatten. Voor een uitgebreidere meting kunt u contact opnemen met Native Consulting.
+          </p>
         )}
       </div>
 

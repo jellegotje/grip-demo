@@ -8,6 +8,12 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* Vangnet: lange samengestelde woorden (zoals (kern)gegevenskwaliteit) mogen
+   nooit buiten hun kader vallen, maar breken netjes af binnen de container. */
+h1, h2, h3, p, li, span, button, a {
+  overflow-wrap: break-word;
+}
+
 .btn-primary {
   background-color: #1E3A5F;
   transition: background-color 0.15s ease;

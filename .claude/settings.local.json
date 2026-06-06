@@ -11,7 +11,8 @@
       "Bash(curl -s -o NUL -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
       "Bash(curl -s http://localhost:3000/)",
       "Bash(findstr /C:\"Voorbeeldresultaat\" /C:\"kerngegevenskwaliteit\" /C:\"9 vragen\")",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "PowerShell(npm install *)"
     ]
   }
 }

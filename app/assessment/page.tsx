@@ -36,8 +36,8 @@ export default function AssessmentPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#1E3A5F' }}>
-          (Kern)gegevenskwaliteitsmeting
+        <h1 className="text-3xl font-bold mb-2 break-words hyphens-auto" style={{ color: '#1E3A5F' }}>
+          (Kern)gegevens&shy;kwaliteits&shy;meting
         </h1>
         <p className="text-gray-700">
           Vul uw organisatiegegevens in en beantwoord de 9 vragen om uw volwassenheidsscore te

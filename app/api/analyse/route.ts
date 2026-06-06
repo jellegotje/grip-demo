@@ -139,7 +139,7 @@ Score: ${dimensionScores.D4.toFixed(1)}. Geef minimaal 3 concrete aanbevelingen 
 **Eerste stap**
 1 concrete, morgen uitvoerbare actie voor de dimensie met de laagste score. Noem een verantwoordelijke rol en een realistisch tijdpad.
 
-Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Verwijs expliciet naar de scores. Schrijf voor een informatiemanager of CIO van een ${organisatieContext.type}.
+Schrijf in begrijpelijk Nederlands, zakelijk maar toegankelijk. Let scherp op een foutloze spelling en grammatica (correcte werkwoordvervoegingen, d/t, en verbindingen). Verwijs expliciet naar de scores. Schrijf voor een informatiemanager of CIO van een ${organisatieContext.type}.
 
 Behandel verplicht alle vier de dimensies D1, D2, D3 en D4 elk in een aparte sectie. Sluit altijd af met een volledige sectie Eerste stap. Geef per dimensie maximaal 3 aanbevelingen van elk maximaal 60 woorden.`;
 

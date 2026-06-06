@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
             <span className="h-5 w-px bg-gray-200" aria-hidden="true" />
             <span className="text-sm font-medium" style={{ color: '#1E3A5F' }}>
-              Grip op Gegevenskwaliteit
+              Grip op Gegevens&shy;kwaliteit
             </span>
           </div>
         </header>
