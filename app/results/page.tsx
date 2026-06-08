@@ -304,7 +304,7 @@ export default function ResultsPage() {
           Onze adviseurs helpen u met een diepgaande analyse en een concreet verbeterplan.
         </p>
         <a
-          href="https://www.nativeconsulting.nl/contact"
+          href="https://www.nativeconsulting.nl/neem-contact-met-ons-op/"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-white font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"

@@ -8,7 +8,7 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Vangnet: lange samengestelde woorden (zoals (kern)gegevenskwaliteit) mogen
+/* Vangnet: lange samengestelde woorden (zoals datakwaliteitsvolwassenheid) mogen
    nooit buiten hun kader vallen, maar breken netjes af binnen de container. */
 h1, h2, h3, p, li, span, button, a {
   overflow-wrap: break-word;

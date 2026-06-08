@@ -14,16 +14,16 @@ export default function HomePage() {
           Gratis demo
         </span>
         <h1 className="text-4xl font-bold mb-4 break-words hyphens-auto" style={{ color: '#1E3A5F' }}>
-          Hoe volwassen is uw (kern)gegevens&shy;kwaliteit?
+          Hoe volwassen is uw datakwaliteit?
         </h1>
         <p className="text-xl text-gray-600 mb-4 leading-relaxed">
           Beantwoord 9 vragen en ontdek direct hoe volwassen uw organisatie is op
-          (kern)gegevens&shy;kwaliteit, structuur, governance en cultuur. U ontvangt een persoonlijke
+          datakwaliteit, structuur, governance en cultuur. U ontvangt een persoonlijke
           analyse met uw score, sterke punten en concrete verbeterstappen.
         </p>
         <p className="text-base text-gray-500 mb-8 leading-relaxed">
           Ontwikkeld voor gemeenten, provincies, waterschappen en samenwerkingsverbanden die willen
-          weten waar ze staan in hun (kern)gegevens&shy;kwaliteit.
+          weten waar ze staan in hun datakwaliteit.
         </p>
 
         {/* Voorbeeldresultaat radar chart */}
@@ -60,7 +60,7 @@ export default function HomePage() {
           step="1"
           icon="📋"
           title="Meting"
-          description="Beantwoord 9 gerichte vragen over 4 dimensies van (kern)gegevens&shy;kwaliteits&shy;volwassenheid."
+          description="Beantwoord 9 gerichte vragen over 4 dimensies van datakwaliteitsvolwassenheid."
         />
         <StepCard
           step="2"
@@ -90,12 +90,12 @@ export default function HomePage() {
           <DimensionInfo
             code="D2"
             naam="Structuur & betekenis"
-            beschrijving="Definities, metadata en (kern)gegevenscatalogus"
+            beschrijving="Definities, metadata en gegevenscatalogus"
           />
           <DimensionInfo
             code="D3"
             naam="Governance"
-            beschrijving="(Kern)gegevens-eigenaren, rollen en beleid"
+            beschrijving="Gegevens-eigenaren, rollen en beleid"
           />
           <DimensionInfo
             code="D4"

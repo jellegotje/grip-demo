@@ -5,7 +5,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Grip op Gegevenskwaliteit – Native Consulting',
   description:
-    'Meet de (kern)gegevenskwaliteitsvolwassenheid van uw organisatie in 5 minuten. Gratis demo van Native Consulting.',
+    'Meet de datakwaliteitsvolwassenheid van uw organisatie in 5 minuten. Gratis demo van Native Consulting.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -106,9 +106,9 @@ export async function POST(req: NextRequest) {
   };
   const maturityLevel = bepaalVolwassenheidsniveau(totalScore);
 
-  const prompt = `Je bent een adviseur (kern)gegevenskwaliteit voor lokale overheden in Nederland.
+  const prompt = `Je bent een adviseur datakwaliteit voor lokale overheden in Nederland.
 
-Een medewerker van een Nederlandse ${organisatieContext.type} met ${organisatieContext.medewerkers} medewerkers heeft een volwassenheidsmeting over (kern)gegevenskwaliteit ingevuld.
+Een medewerker van een Nederlandse ${organisatieContext.type} met ${organisatieContext.medewerkers} medewerkers heeft een volwassenheidsmeting over datakwaliteit ingevuld.
 
 Resultaten:
 - Totaalscore: ${totalScore.toFixed(1)} / 5.0 → Niveau: ${maturityLevel}

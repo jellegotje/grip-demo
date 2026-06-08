@@ -166,7 +166,7 @@ export async function exporteerAnalysePdf({ organisatie, results, analyse }: Pdf
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(...NAVY);
-  doc.text('Volwassenheidsmeting (kern)gegevenskwaliteit', margin, y, { maxWidth: contentW });
+  doc.text('Volwassenheidsmeting datakwaliteit', margin, y, { maxWidth: contentW });
   y += 24;
 
   // 3. Organisatiecontext + datum
@@ -264,6 +264,22 @@ export async function exporteerAnalysePdf({ organisatie, results, analyse }: Pdf
     }
   }
 
+  // 6b. AI-disclaimer onder de analyse
+  controleerRuimte(36);
+  streep();
+  y += 16;
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8.5);
+  doc.setTextColor(...MUTED);
+  const disclaimerRegels = doc.splitTextToSize(
+    saneerTekst(
+      'Deze analyse is gegenereerd met behulp van AI en kan fouten bevatten. Voor een uitgebreidere meting kunt u contact opnemen met Native Consulting.'
+    ),
+    contentW
+  );
+  doc.text(disclaimerRegels, margin, y);
+  y += disclaimerRegels.length * 12 + 6;
+
   // 7. Voettekst op elke pagina
   const aantalPaginas = doc.getNumberOfPages();
   for (let p = 1; p <= aantalPaginas; p++) {
@@ -275,7 +291,7 @@ export async function exporteerAnalysePdf({ organisatie, results, analyse }: Pdf
     doc.setFontSize(8);
     doc.setTextColor(...MUTED);
     doc.text(
-      'Analyse gegenereerd door Claude (Anthropic) · Native Consulting',
+      'Gegenereerd met AI — Native Consulting',
       margin,
       pageH - margin + 16
     );

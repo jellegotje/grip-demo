@@ -37,7 +37,7 @@ export default function AssessmentPage() {
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 break-words hyphens-auto" style={{ color: '#1E3A5F' }}>
-          (Kern)gegevens&shy;kwaliteits&shy;meting
+          Datakwaliteitsmeting
         </h1>
         <p className="text-gray-700">
           Vul uw organisatiegegevens in en beantwoord de 9 vragen om uw volwassenheidsscore te
@@ -55,16 +55,14 @@ export default function AssessmentPage() {
         </span>
         <div className="flex-1">
           <h2 className="font-bold text-base" style={{ color: '#1E3A5F' }}>
-            Wat zijn (kern)gegevens?
+            Wat verstaan wij onder datakwaliteit?
           </h2>
           {definitieOpen && (
             <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-              Kerngegevens van een gemeente zijn de belangrijkste, objectieve gegevens en feiten over
-              een specifieke gemeente. Ze vormen een overzicht van de demografische, sociale en
-              geografische status van het gebied en worden gebruikt voor beleidsvorming, onderzoek en
-              informatievoorziening aan inwoners. Denk hierbij aan cijfers over aantallen inwoners,
-              demografische gegevens, wijkindelingen, cijfers over ingezette zorg, arbeidsmarktgegevens,
-              woningvoorraad, woningtypes etc.
+              Datakwaliteit gaat over hoe betrouwbaar, volledig en actueel uw kerngegevens zijn.
+              Kerngegevens zijn de belangrijkste gegevens die uw organisatie gebruikt voor
+              dienstverlening, beleid en rapportage — denk aan persoonsgegevens, zaakgegevens,
+              basisregistraties, gegevens over ingezette zorg, woningvoorraad en arbeidsmarkt.
             </p>
           )}
           <button
